@@ -1,0 +1,298 @@
+/**
+ * Created by Giles on 11/25/2014.
+ */
+public class change
+{
+    public static void main(String[] args)
+    {
+        new ChangeMachine();
+    }
+}
+
+
+/**
+ * Created by Giles on 11/25/2014.
+ *
+ * Dispenses money in the smallest number of coins or bills possible.
+ *
+ */
+public class ChangeMachine
+{
+    private String[] stringNumbers = {"127.43", "56.13", "35.89", "14.03", "5.79", "3.55"}; //original numbers
+    private int index;  //Index
+    private int originalIndex;  //where the decimal point is found, 3 for hundreds, 2 for tens, 1 for ones.
+    private int change=0; // separating the change from the whole dollars
+    private int quarters=0; // the number of quarters in each item.
+    private int dimes=0;    // the number of dimes in each item.
+    private int nickels=0;  // the number of nickels in each item.
+    private int pennies=0;  // the number of pennies in each item.
+
+    /*where the decimal is determines how many digits there are in the number. This method
+    discovers where the decimal is.
+     */
+
+    public void getDecimalPoint(String rawNumber)
+    {
+        if (rawNumber.contains("."))
+        {
+            index = rawNumber.indexOf ('.');
+            System.out.print("$"+rawNumber + ": " ); //Print out the number before printing out the bills and change.
+        }
+
+    }
+
+    // Encapsulates the money discovery process.
+
+       public void dealWithDollars(String dollars)
+    {
+        originalIndex = index;
+
+        for(int i=0; i<originalIndex; i++) // Process the digits from left to right.
+        {
+
+            processDollars(dollars.charAt(i));
+            index--; //Process the right placeholder, hundreds, tens, or ones.
+        }
+
+        String temp=dollars.substring(originalIndex+1,originalIndex+3); //save a substring from the decimal point + 2.
+        //System.out.print(temp+" temp; "); Used for testing.
+        change = Integer.parseInt(temp); // Turn the change into integers.
+       // System.out.print(change+" change; "); Used for testing.
+        processChange();
+        printChange();
+
+    }
+
+    //Process the change part of the item.
+
+    public void processChange()
+    {
+        if (change>75)
+        {
+            quarters=3;
+            change = change-75;
+        }
+        else if (change>50)
+        {
+            quarters=2;
+            change=change-50;
+        }
+        else if (change>25)
+        {
+
+            quarters=1;
+            change=change-25;
+        }
+
+        switch (change)
+        {
+            case 24: {dimes=2; pennies=4; break;}
+            case 23: {dimes=2; pennies=3; break;}
+            case 22: {dimes=2; pennies=2; break;}
+            case 21: {dimes=2; pennies=1; break;}
+            case 20: {dimes=2; break;}
+            case 19: {dimes=1; nickels=1; pennies=4; break;}
+            case 18: {dimes=1; nickels=1; pennies=3; break;}
+            case 17: {dimes=1; nickels=1; pennies=2; break;}
+            case 16: {dimes=1; nickels=1; pennies=1; break;}
+            case 15: {dimes=1; nickels=1; break;}
+            case 14: {dimes=1; pennies=4; break;}
+            case 13: {dimes=1; pennies=3; break;}
+            case 12: {dimes=1; pennies=2; break;}
+            case 11: {dimes=1; pennies=1; break;}
+            case 10: {dimes=1; break;}
+            case 9: {nickels=1; pennies=4; break;}
+            case 8: {nickels=1; pennies=3; break;}
+            case 7: {nickels=1; pennies=2; break;}
+            case 6: {nickels=1; pennies=1; break;}
+            case 5: {nickels=1; break;}
+            case 4: {pennies=4; break;}
+            case 3: {pennies=3; break;}
+            case 2: {pennies=2; break;}
+            case 1: {pennies=1; break;}
+        }
+    }
+
+    //Print the change after it is processed.
+    public void printChange()
+    {
+        if (quarters>1){System.out.print(quarters+" quarters, ");}
+        else if (quarters>0){System.out.print(quarters+" quarter, ");}
+
+        if (dimes>1){System.out.print(dimes+" dimes, ");}
+        else if (dimes>0){System.out.print(dimes+" dime, ");}
+
+        if (nickels>1){System.out.print(nickels+" nickels, ");}
+        else if (nickels>0){System.out.print(nickels+" nickel, ");}
+
+        if (pennies>1){System.out.print(pennies+" pennies, ");}
+        else if (pennies>0){System.out.print(pennies+" penny, ");}
+
+        quarters=0;
+        dimes=0;
+        nickels=0;
+        pennies=0;
+
+        System.out.println(""); // start the next line.
+
+    }
+
+    //discover and print the bills needed for each item.
+
+    public void processDollars (char number) {
+
+        switch (number) {
+            case '9': {
+                if (index == 3) {
+                    System.out.print("9 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 fifty, 2 twenties, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 five, 2 twos ");
+                    break;
+                }
+
+            }
+
+            case '8': {
+                if (index == 3) {
+                    System.out.print("8 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 fifty, 1 twenties, 1 ten, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 five, 1 two, 1 one, ");
+                    break;
+                }
+            }
+
+            case '7': {
+                if (index == 3) {
+                    System.out.print("7 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 fifty, 1 twenty, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 five, 1 two, ");
+                    break;
+                }
+            }
+
+            case '6': {
+                if (index == 3) {
+                    System.out.print("6 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 fifty, 1 ten, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 five, 1 one, ");
+                    break;
+                }
+            }
+
+            case '5': {
+                if (index == 3) {
+                    System.out.print("5 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 fifty, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 five, ");
+                    break;
+                }
+            }
+
+            case '4': {
+                if (index == 3) {
+                    System.out.print("4 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("2 twenties, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("2 twos, ");
+                    break;
+                }
+            }
+
+            case '3': {
+                if (index == 3) {
+                    System.out.print("3 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 twenty, 1 ten, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 twos, 1 one ");
+                    break;
+                }
+            }
+
+            case '2': {
+                if (index == 3) {
+                    System.out.print("2 hundreds, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 twenty, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 twos, ");
+                    break;
+                }
+            }
+
+            case '1': {
+                if (index == 3) {
+                    System.out.print("1 hundred, ");
+                    break;
+                }
+                if (index == 2) {
+                    System.out.print("1 ten, ");
+                    break;
+                }
+                if (index == 1) {
+                    System.out.print("1 one, ");
+                    break;
+                }
+            }
+
+        }
+    }
+
+
+
+    //Constructor for the class.
+    public ChangeMachine()
+    {
+
+        for (int i=0; i<6; i++)
+        {
+            getDecimalPoint(stringNumbers[i]);
+            dealWithDollars(stringNumbers[i]);
+        }
+
+
+    }
+}
